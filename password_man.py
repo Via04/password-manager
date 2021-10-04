@@ -95,25 +95,28 @@ if __name__ == '__main__':
                             help='Use special characters')
     arg_parser.add_argument('-l', '--length', default=32,
                             help='Length of generated password')
-    arg_parser.add_argument('-p', '--pass_man', action='store_true',
+    arg_parser.add_argument('-g', '--gen_mode', action='store_true',
                             help='Enter password manager mode')
     args = arg_parser.parse_args()
-    if args.pass_man:
+    if not args.gen_mode:
         password = input(
             'Введите пароль (если первый раз, то любой подойдет):').encode()
         pass_man = PasswordManager(password)
-        option = input('Выберите действие:\na: добавить строку' +
-                       '\nd: удалить строку' +
-                       '\ns: показать содержимое\n')
-        if option == 'a':
-            line = input('Введите, что вы ходите добавить:').encode()
-            pass_man.append_line(line)
-        if option == 'd':
-            pass_man.print_file()
-            num = input('Введите номер строки которую хотите удалить:')
-            pass_man.delete_line(int(num))
-        if option == 's':
-            pass_man.print_file()
+        option = ''
+        while option != 'e':
+            option = input('Выберите действие:\na: добавить строку' +
+                           '\nd: удалить строку' +
+                           '\ns: показать содержимое' +
+                           '\ne: выйти из программы\n')
+            if option == 'a':
+                line = input('Введите, что вы ходите добавить:').encode()
+                pass_man.append_line(line)
+            if option == 'd':
+                pass_man.print_file()
+                num = input('Введите номер строки которую хотите удалить:')
+                pass_man.delete_line(int(num))
+            if option == 's':
+                pass_man.print_file()
     else:
         passwd = PasswordManager.gen_pass(int(args.length), args.special)
         print(passwd)
