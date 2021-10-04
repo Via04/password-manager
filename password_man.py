@@ -36,29 +36,25 @@ class PasswordManager:
         with open(self.filepath, 'ab') as f:
             token = self.fernet.encrypt(line)
             f.write(token)
+            f.write('\n'.encode())
 
     def delete_line(self, line_num: int):
         final_content = b''
         with open(self.filepath, 'rb') as f:
             counter = 1
-            line = f.read(100)
-            while line:
+            for line in f:
                 if counter == line_num:
-                    line = f.read(100)
                     counter += 1
+                    continue
                 final_content += line
                 counter += 1
-                line = f.read(100)
         with open(self.filepath, 'wb') as f:
             f.write(final_content)
 
     def print_file(self):
+        n = 1
         with open(self.filepath, 'rb') as f:
-            line = f.read(100)  # Читаем файл по 100 байт, так как
-            # результирующая шифрованная строка как раз 100 байт
-            # максимальная длина при этом 32 символа
-            n = 1
-            while line:
+            for line in f:
                 try:
                     decrypted = self.fernet.decrypt(line)
                     print(str(n) + '. ' + decrypted.decode('utf-8'))
@@ -66,7 +62,6 @@ class PasswordManager:
                     print('Введен неправильный пароль')
                 finally:
                     n += 1
-                    line = f.read(100)
 
     def load_key(self, password: str):
         if not isfile(self.public_file):
