@@ -96,7 +96,7 @@ if __name__ == '__main__':
     arg_parser.add_argument('-l', '--length', default=32,
                             help='Length of generated password')
     arg_parser.add_argument('-g', '--gen_mode', action='store_true',
-                            help='Enter password manager mode')
+                            help='Enter password generator mode')
     args = arg_parser.parse_args()
     if not args.gen_mode:
         password = input(
